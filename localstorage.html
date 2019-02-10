@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <title>Gustav Henninger</title>
+</head>
+
+<body>
+    <h1>Javascript Shopping List</h1>
+
+
+    <input type="text" id="inputName" placeholder="Skriv vara">
+    <input type="number" id="inputCount" placeholder="Antal">
+    <input type="number" id="inputPrice" placeholder="SEK st">
+    <input type="button" value="Lägg till" onClick="addObject()"><br><br>
+
+
+    <div id="output"></div><br>
+    <div id="outputTotal"></div>
+
+    <script>
+        // Hämtar från LocalStorage
+        var existing = localStorage.getItem('myStorage');
+
+        var items = JSON.parse(existing); // Säger åt systemet att tolka(parse/analysera) strängen som ett objekt. Vi tillskriver items det som finns i webbläsarens minne från variabel existing.
+
+        // Om det inte finns någon info i "var existing", skapa tom array. (annars skrivs "null" pga JSON.parse)
+        if (items == null) {
+            items = [];
+        }
+
+        // Uppdaterar listan om det finns ngt i "var existing"
+        updateUI();
+        // Skriver ut total, antignen 0 SEK eller om det finns ngt i "var existing"
+        calcTotal(); 
+
+        function addObject() {
+
+            var inputName = document.getElementById("inputName").value;
+            var inputCount = document.getElementById("inputCount").value;
+            var inputPrice = document.getElementById("inputPrice").value;
+
+            // Skapar ett nytt objekt med info från input ovan
+            var newObject = {
+                name: inputName,
+                count: inputCount,
+                price: inputPrice
+            }
+
+            // Skickar objektet till items
+            items.push(newObject);
+
+            // När användaren trycker på "Lägg till" och aktiverar addObject() så aktiveras även funktionerna nedan
+            saveToStorage();
+            updateUI();
+            calcTotal();
+
+        }
+
+
+        function saveToStorage() {
+
+            var itemsToString = JSON.stringify(items);
+
+            localStorage.setItem('myStorage', itemsToString);
+
+        }
+
+
+        function updateUI() {
+
+            theTable = "<table border='1' cellpadding='5'>";
+
+            theTable += "<th>Vara</th><th>Antal st</th><th>Pris</th>"
+
+            // Genererar ny td (tabellrad) för varje iteration av array "items"
+            for (i = 0; i < items.length; i++) {
+                theTable += "<tr>" + "<td>" +
+                    items[i].name + "<td>" +
+                    items[i].count + "<td>" +
+                    items[i].price + " SEK" + "</tr>";
+            }
+
+            theTable += "</table>"
+
+            document.getElementById("output").innerHTML = theTable;
+
+        }
+
+
+        function calcTotal() {
+
+            var bucket = 0;
+
+            for (i = 0; i < items.length; i++) {
+                bucket += (items[i].price * items[i].count);
+            }
+
+            document.getElementById("outputTotal").innerHTML = "Totalt: " + bucket + " SEK";
+
+        }
+    </script>
+</body>
+</html>
