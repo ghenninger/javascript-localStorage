@@ -12,7 +12,8 @@
     <input type="text" id="inputName" placeholder="Skriv vara">
     <input type="number" id="inputCount" placeholder="Antal">
     <input type="number" id="inputPrice" placeholder="SEK st">
-    <input type="button" value="Lägg till" onClick="addObject()"><br><br>
+    <input type="button" value="Lägg till" onClick="addObject()">
+    <input type="button" value="Rensa lista" onclick="clearStorage()">
 
 
     <div id="output"></div><br>
@@ -98,7 +99,21 @@
 
             document.getElementById("outputTotal").innerHTML = "Totalt: " + bucket + " SEK";
 
+            updateUI();
+        
         }
+
+        function clearStorage() {
+
+            // Key = 'myStorage'
+            localStorage.removeItem('myStorage');
+
+            items = [];
+
+            calcTotal();
+            
+        }
+
     </script>
 </body>
 </html>
